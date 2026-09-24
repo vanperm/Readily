@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>(function(){try{if(localStorage.getItem("readily:theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="img/favicon.png">
+<title>Readily &middot; Log In</title>
+<meta name="description" content="Log in to Readily — members, librarians, and store staff all sign in here.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="rrPageLoader" class="rr-page-loader">
+  <div class="rr-loader-mark"><img src="img/logo-mark.png" alt=""></div>
+  <div class="rr-loader-ring" hidden></div>
+  <div class="rr-loader-text" hidden>Loading…</div>
+</div>
+
+
+<header class="ledger-bar">
+  <div class="ledger-inner">
+    <a href="index.html" class="ledger-mark"><span class="mark-icon"><img class="icon-dark" src="img/logo-mark-dark.png" alt=""><img class="icon-light" src="img/logo-mark.png" alt=""></span> Readily <small>Library &amp; Bookshop</small></a>
+    <div class="ledger-actions">
+      <div class="nav-cta"><a href="browse.html" class="btn-nav-ghost">Back to Browsing</a></div>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="auth-hero">
+  <div class="auth-shell">
+    <h1>Welcome back</h1>
+    <p class="sub">One login for members, librarians, and store staff — your account decides where you land.</p>
+
+    <div class="auth-hint">
+      <strong>Demo logins</strong><br>
+      Member &middot; alex@readily.demo / demo1234<br>
+      Librarian &middot; librarian@readily.demo / demo1234<br>
+      Store Staff &middot; staff@readily.demo / demo1234
+    </div>
+
+    <div id="loginError" class="auth-hint" style="border-color:var(--danger);color:var(--danger);background:var(--danger-bg)" hidden></div>
+
+    <form id="loginForm">
+      <div class="field">
+        <label for="loginEmail">Email</label>
+        <input type="email" id="loginEmail" required autocomplete="email" placeholder="you@example.com">
+      </div>
+      <div class="field">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" required autocomplete="current-password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;">
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Log In</button>
+    </form>
+
+    <div class="auth-switch">New here? <a href="signup.html">Create a member account</a></div>
+  </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <span>Readily &middot; a library and a bookshop, under one roof.</span>
+</footer>
+
+<script src="js/page-loader.js"></script>
+<script src="js/data.js"></script>
+<script src="js/genre-colors.js"></script>
+<script src="js/store.js"></script>
+<script src="js/sound.js"></script>
+<script src="js/common.js"></script>
+<script src="js/login.js"></script>
+<script type="module" src="js/motion-fx.js"></script>
+</body>
+</html>

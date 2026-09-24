@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>(function(){try{if(localStorage.getItem("readily:theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="img/favicon.png">
+<title>Readily &middot; Librarian Desk</title>
+<meta name="description" content="Librarian dashboard: circulation, library catalog, members, and reports.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-role="librarian">
+<div id="rrPageLoader" class="rr-page-loader">
+  <div class="rr-loader-mark"><img src="img/logo-mark.png" alt=""></div>
+  <div class="rr-loader-ring" hidden></div>
+  <div class="rr-loader-text" hidden>Loading&hellip;</div>
+</div>
+
+<header class="ledger-bar">
+  <div class="ledger-inner">
+    <a href="librarian.html" class="ledger-mark"><span class="mark-icon"><img class="icon-dark" src="img/logo-mark-dark.png" alt=""><img class="icon-light" src="img/logo-mark.png" alt=""></span> Readily <small>Librarian Desk</small></a>
+    <nav class="ledger-nav">
+      <span class="role-badge">Librarian</span>
+    </nav>
+    <div class="ledger-actions">
+      <div class="nav-cta"><a href="browse.html" class="btn-nav-ghost">View Public Site</a></div>
+      <div id="accountMenuSlot"></div>
+      <button class="sound-toggle" id="soundToggle" aria-label="Toggle sound"></button>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <span class="eyebrow">Librarian Desk</span>
+    <h1>Library Operations.</h1>
+    <p class="lede">Circulation, catalog, members, and reports for the lending side of Readily.</p>
+  </section>
+
+  <div class="admin-grid-stats">
+    <div class="stat-card"><span class="sc-label">Library Titles</span><span class="sc-val" id="statTitles">0</span></div>
+    <div class="stat-card"><span class="sc-label">Active Loans</span><span class="sc-val" id="statLoans">0</span></div>
+    <div class="stat-card" id="statCardOverdue"><span class="sc-label">Overdue Alerts</span><span class="sc-val" id="statOverdue">0</span></div>
+    <div class="stat-card"><span class="sc-label">Registered Members</span><span class="sc-val" id="statMembers">0</span></div>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button type="button" class="tab-btn active" data-tab="circulation" role="tab">Circulation</button>
+    <button type="button" class="tab-btn" data-tab="catalog" role="tab">Catalog</button>
+    <button type="button" class="tab-btn" data-tab="members" role="tab">Members</button>
+    <button type="button" class="tab-btn" data-tab="reports" role="tab">Reports</button>
+  </div>
+
+  <section id="panelCirculation">
+    <div class="admin-header-row">
+      <div><h2>Active Circulation</h2><span class="desc">All library copies currently on loan</span></div>
+    </div>
+    <div class="table-wrap">
+      <table class="admin-table">
+        <thead><tr><th>Book</th><th>Borrower</th><th>Due Date</th><th>Status</th><th style="text-align:right">Actions</th></tr></thead>
+        <tbody id="circulationBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="panelCatalog" hidden>
+    <div class="admin-header-row">
+      <div><h2>Library Catalog</h2><span class="desc">Manage titles and how many digital copies (licenses) each one has</span></div>
+      <button type="button" class="btn btn-primary btn-sm" id="btnOpenIntake">+ Add New Book</button>
+    </div>
+    <div class="table-wrap">
+      <table class="admin-table">
+        <thead><tr><th>Title</th><th>Genre / Year</th><th>Call Number</th><th>Licenses</th><th>Availability</th><th style="text-align:right">Actions</th></tr></thead>
+        <tbody id="catalogBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="panelMembers" hidden>
+    <div class="admin-header-row">
+      <div><h2>Members</h2><span class="desc">Search accounts, view activity, suspend or reactivate</span></div>
+    </div>
+    <div class="search-field" style="max-width:340px;margin-bottom:14px">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <label for="memberSearch" class="visually-hidden">Search members</label>
+      <input id="memberSearch" type="text" placeholder="Search by name or email...">
+    </div>
+    <div class="table-wrap">
+      <table class="admin-table">
+        <thead><tr><th>Member</th><th>Card No.</th><th>Active Loans</th><th>History</th><th>Status</th><th style="text-align:right">Actions</th></tr></thead>
+        <tbody id="membersBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="panelReports" hidden>
+    <div class="admin-header-row"><div><h2>Reports</h2><span class="desc">Most borrowed titles, all time</span></div></div>
+    <div class="table-wrap">
+      <table class="admin-table">
+        <thead><tr><th>#</th><th>Title</th><th>Genre</th><th>Times Borrowed</th></tr></thead>
+        <tbody id="reportsBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="reset-demo-row">
+    <div class="rd-text"><strong>Reset for Demo</strong><span>Wipes all accounts, loans, orders, and catalog edits, then restores the original demo data.</span></div>
+    <button type="button" class="btn btn-danger btn-sm" id="btnResetDemo">Reset for Demo</button>
+  </div>
+</main>
+
+<!-- Intake Modal -->
+<div class="modal-backdrop" id="intakeModal" hidden role="dialog" aria-modal="true" aria-labelledby="intakeTitle">
+  <div class="modal-card">
+    <h2 id="intakeTitle">Add a Library Book</h2>
+    <p class="sub">This title will be free to borrow, limited by the license count you set.</p>
+    <form id="intakeForm">
+      <div class="intake-grid">
+        <div class="field intake-full"><label for="newTitle">Title *</label><input type="text" id="newTitle" required></div>
+        <div class="field"><label for="newAuthor">Author *</label><input type="text" id="newAuthor" required></div>
+        <div class="field"><label for="newGenre">Genre</label>
+          <select id="newGenre">
+            <option>Fiction</option><option>Mystery</option><option>Science Fiction</option><option>Fantasy</option>
+            <option>Romance</option><option>Poetry</option><option>Non-Fiction</option><option>Horror</option>
+            <option>Classic Literature</option><option>Adventure</option><option>Self-Help</option>
+          </select>
+        </div>
+        <div class="field"><label for="newYear">Year</label><input type="number" id="newYear" value="2024"></div>
+        <div class="field"><label for="newLicenses">Licenses (copies)</label><input type="number" id="newLicenses" value="3" min="1" max="20"></div>
+        <div class="field intake-full"><label for="newBlurb">Blurb</label><textarea id="newBlurb" rows="2"></textarea></div>
+        <div class="field intake-full"><label for="newExcerpt">Opening lines (reader preview)</label><textarea id="newExcerpt" rows="3"></textarea></div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-outline" id="btnCancelIntake">Cancel</button>
+        <button type="submit" class="btn btn-primary">Add to Catalog</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Reset Confirm Modal -->
+<div class="modal-backdrop" id="resetModal" hidden role="dialog" aria-modal="true" aria-labelledby="resetTitle">
+  <div class="modal-card" style="max-width:420px">
+    <h2 id="resetTitle">Reset all demo data?</h2>
+    <p class="sub">This erases every account, loan, order, and catalog edit on this browser, then restores the original sample data. You'll be logged out.</p>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-outline" id="btnCancelReset">Cancel</button>
+      <button type="button" class="btn btn-danger" id="btnConfirmReset">Yes, Reset Everything</button>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer"><span>Readily &middot; Librarian Desk</span></footer>
+<div id="toast-region"></div>
+
+<script src="js/page-loader.js"></script>
+<script src="js/data.js"></script>
+<script src="js/genre-colors.js"></script>
+<script src="js/store.js"></script>
+<script src="js/sound.js"></script>
+<script src="js/toast.js"></script>
+<script src="js/common.js"></script>
+<script src="js/librarian.js"></script>
+<script type="module" src="js/motion-fx.js"></script>
+</body>
+</html>

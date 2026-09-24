@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>(function(){try{if(localStorage.getItem("readily:theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="img/favicon.png">
+<title>Readily &middot; Checkout</title>
+<meta name="description" content="Checkout — Readily bookshop.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="rrPageLoader" class="rr-page-loader">
+  <div class="rr-loader-mark"><img src="img/logo-mark.png" alt=""></div>
+  <div class="rr-loader-ring" hidden></div>
+  <div class="rr-loader-text" hidden>Loading…</div>
+</div>
+
+
+<header class="ledger-bar">
+  <div class="ledger-inner">
+    <a href="index.html" class="ledger-mark"><span class="mark-icon"><img class="icon-dark" src="img/logo-mark-dark.png" alt=""><img class="icon-light" src="img/logo-mark.png" alt=""></span> Readily <small>Library &amp; Bookshop</small></a>
+    <nav class="ledger-nav">
+      <a href="index.html">Home</a>
+      <a href="browse.html" title="Search and filter the full catalog">Browse</a>
+      <a href="explorer.html" title="A visual shelf view to browse by genre">Explorer</a>
+      <a href="my-books.html">My Books <span class="count" id="navLoanCount">0</span></a>
+      <a href="cart.html" class="on">Cart <span class="count" id="navCartCount">0</span></a>
+    </nav>
+    <div class="ledger-actions">
+      <div id="accountMenuSlot"></div>
+      <button class="sound-toggle" id="soundToggle" aria-label="Toggle sound"></button>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div style="padding:32px 0 4px">
+    <h1 class="section-heading">Checkout</h1>
+    <p class="section-sub">This is a demo payment form &mdash; no real card is charged.</p>
+  </div>
+  <div class="cart-layout">
+    <div class="auth-shell" style="margin:0;max-width:none">
+      <form id="checkoutForm">
+        <div class="field">
+          <label for="ckName">Name on card</label>
+          <input type="text" id="ckName" required placeholder="e.g. Alex Rivera">
+        </div>
+        <div class="field">
+          <label for="ckNumber">Card number</label>
+          <input type="text" id="ckNumber" required placeholder="4242 4242 4242 4242" inputmode="numeric" maxlength="19">
+          <div class="error-msg">Enter a 16-digit card number.</div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="ckExpiry">Expiry</label>
+            <input type="text" id="ckExpiry" required placeholder="MM/YY" maxlength="5">
+            <div class="error-msg">Use MM/YY format.</div>
+          </div>
+          <div class="field">
+            <label for="ckCvc">CVC</label>
+            <input type="text" id="ckCvc" required placeholder="123" inputmode="numeric" maxlength="4">
+            <div class="error-msg">3&ndash;4 digits.</div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" id="ckSubmit">Pay &amp; Complete Order</button>
+      </form>
+    </div>
+    <div class="summary-panel" id="checkoutSummary"></div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <span>Readily &middot; a library and a bookshop, under one roof.</span>
+</footer>
+
+<div id="toast-region"></div>
+
+<script src="js/page-loader.js"></script>
+<script src="js/data.js"></script>
+<script src="js/genre-colors.js"></script>
+<script src="js/store.js"></script>
+<script src="js/sound.js"></script>
+<script src="js/toast.js"></script>
+<script src="js/confetti.js"></script>
+<script src="js/common.js"></script>
+<script src="js/checkout.js"></script>
+<script type="module" src="js/motion-fx.js"></script>
+</body>
+</html>

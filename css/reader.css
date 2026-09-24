@@ -1,0 +1,179 @@
+/* ============================================================
+   Readily: book detail page — 3D reader + borrow/buy panel — v2
+   Keeps the page-turn mechanic (a genuinely nice interaction) but
+   restyles its chrome to the monochrome system: no parchment
+   textures, drop caps or brass rules — flat covers, clean type.
+   ============================================================ */
+
+/* ───────────────────────── page shell (book.html) ───────────────────────── */
+
+.book-detail-panel {
+  position: relative; background: var(--surface); border-radius: 20px; width: 100%;
+  margin: 22px 0 70px; min-height: min(600px, 82vh); box-shadow: var(--shadow-lift);
+  border: 1px solid var(--line); display: grid; grid-template-columns: 1.3fr 1fr; overflow: hidden;
+}
+@media (max-width: 820px) { .book-detail-panel { grid-template-columns: 1fr; } }
+
+.back-link {
+  display: inline-flex; align-items: center; gap: 6px; font-family: var(--sans); font-size: 13px; font-weight: 600;
+  color: var(--ink-2); text-decoration: none; margin-top: 22px; transition: color .15s;
+}
+.back-link:hover { color: var(--ink); }
+.back-link svg { width: 14px; height: 14px; }
+
+/* ───────────────────────── stage (left column) ───────────────────────── */
+
+.book-stage {
+  background: var(--surface-2);
+  background-image: var(--dot-grid);
+  background-size: 22px 22px;
+  border-right: 1px solid var(--line); display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: clamp(28px, 4vw, 46px) clamp(20px, 3vw, 36px); gap: 22px; min-height: 480px;
+}
+
+.reading-progress { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: .02em; }
+
+.book-closed { position: relative; perspective: 1800px; width: 100%; display: flex; justify-content: center; }
+.book-closed::before { content: none; }
+
+.cover3d {
+  width: min(230px, 60vw); aspect-ratio: 3 / 4.15; position: relative; transform-style: preserve-3d;
+  transform: rotateY(-16deg); transition: transform .4s var(--ease), opacity .35s var(--ease); cursor: pointer;
+}
+.cover3d:hover { transform: rotateY(-22deg) translateY(-2px); }
+.cover3d:focus-visible { outline: 2px solid var(--ink); outline-offset: 6px; }
+
+.cover3d .front-face {
+  position: absolute; inset: 0; border-radius: 10px; box-shadow: 0 20px 40px -18px rgba(9,9,11,.35);
+  display: flex; flex-direction: column; justify-content: space-between; padding: 20px 18px; overflow: hidden;
+}
+.cover3d .front-face::after { content: none; } /* cover art no longer needs a legibility scrim behind site text */
+.cover3d .cover-art-slot { position: absolute; inset: 0; border-radius: 10px; overflow: hidden; z-index: 0; pointer-events: none; }
+.cover3d .cover-art-slot .cover-art-svg { width: 100%; height: 100%; object-fit: cover; }
+.cover3d .emblem { display: none; } /* superseded by the fuller cover illustration */
+.cover3d .cover-title { display: none; } /* cover art now carries its own title/author typography */
+.cover3d .cover-author { display: none; } /* cover art now carries its own title/author typography */
+.cover3d .spine-edge, .cover3d .pages-edge { display: none; }
+
+.book-closed.opening .cover3d { animation: swingOpen .5s var(--ease) forwards; }
+@keyframes swingOpen {
+  0% { transform: rotateY(-16deg); }
+  60% { transform: rotateY(-98deg); }
+  100% { transform: rotateY(-70deg); opacity: 0; }
+}
+
+.open-hint { font-family: var(--mono); font-size: 11px; color: var(--ink-3); text-align: center; text-transform: uppercase; letter-spacing: .04em; }
+
+/* ── open reader (page turning) ── */
+
+.book-reader { display: none; width: 100%; flex-direction: column; align-items: center; gap: 18px; }
+.book-reader.show { display: flex; }
+
+.spread { perspective: 2600px; display: flex; width: min(460px, 100%); aspect-ratio: 8/5; border-radius: 10px; box-shadow: 0 20px 44px -20px rgba(9,9,11,.3); overflow: visible; background: var(--surface); }
+
+.page-col { width: 50%; position: relative; background: var(--surface); }
+.page-col.left { border-radius: 10px 0 0 10px; box-shadow: inset -1px 0 0 var(--line); overflow: hidden; }
+.page-col.right { border-radius: 0 10px 10px 0; box-shadow: inset 1px 0 0 var(--line); transform-style: preserve-3d; -webkit-transform-style: preserve-3d; }
+
+/* will-change forces its own stable GPU compositing layer on the leaf.
+   Without it, Chrome combining border-radius + backface-visibility:hidden
+   on a rotating 3D element (.leaf-face below) can flash the hidden
+   backface visible for a frame or two mid-transition before correcting
+   itself on the next repaint — a known Chromium compositing quirk. */
+.leaf { position: absolute; inset: 0; transform-style: preserve-3d; -webkit-transform-style: preserve-3d; transform-origin: left center; transform: rotateY(0deg); transition: transform .6s cubic-bezier(.45,.05,.2,1); will-change: transform; }
+.leaf.flipped { transform: rotateY(-180deg); }
+.leaf-face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; transform: translateZ(0); background: var(--surface); padding: clamp(18px, 3vw, 28px) clamp(16px, 2.6vw, 24px); overflow: hidden; display: flex; flex-direction: column; border-radius: 10px; }
+.leaf-face.back { transform: rotateY(180deg) translateZ(0); }
+
+.static-plate {
+  position: absolute; inset: 0; background: var(--surface); z-index: 0; padding: clamp(18px, 3vw, 28px) clamp(16px, 2.6vw, 24px);
+  display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; overflow: hidden; border-radius: 10px;
+}
+
+.page-text { font-family: var(--sans); font-size: 13.5px; line-height: 1.68; color: var(--ink-2); white-space: pre-wrap; overflow-y: auto; flex: 1; min-height: 0; text-align: left; }
+.page-text.no-dropcap { text-align: center; }
+
+.page-heading { font-family: var(--mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 12px; }
+
+.title-plate { font-family: var(--serif); }
+.title-plate .tp-title { font-size: 22px; font-weight: 700; line-height: 1.12; margin-bottom: 8px; letter-spacing: -.02em; }
+.title-plate .tp-author { font-family: var(--mono); font-size: 10.5px; color: var(--ink-3); margin-bottom: 18px; text-transform: uppercase; letter-spacing: .04em; }
+.title-plate .tp-rule { width: 28px; height: 2px; background: var(--ink); margin: 0 auto 18px; border-radius: 2px; }
+.title-plate .tp-edition { font-size: 11px; color: var(--ink-3); font-family: var(--sans); }
+
+.exlibris { border: 1px solid var(--line); border-radius: 12px; padding: 18px; width: 84%; }
+.exlibris .el-mark { font-family: var(--mono); font-size: 9.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 10px; }
+.exlibris .el-name-line { border-bottom: 1px solid var(--line); height: 20px; margin: 14px auto; width: 70%; }
+.exlibris p { font-family: var(--sans); font-style: italic; font-size: 12px; color: var(--ink-2); margin: 0; }
+
+.due-card { border: 1px solid var(--line); border-radius: 10px; width: 92%; font-family: var(--mono); padding: 14px; }
+.due-card .dc-head { font-size: 10px; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-3); border-bottom: 1px solid var(--line); padding-bottom: 8px; margin-bottom: 8px; }
+.due-card table { width: 100%; border-collapse: collapse; font-size: 10.5px; }
+.due-card td { padding: 5px 2px; border-bottom: 1px dotted var(--line); color: var(--ink-3); }
+.due-card td.stamped { color: var(--ink); font-weight: 600; }
+
+.end-plate .ep-label { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: .04em; text-transform: uppercase; margin-bottom: 8px; }
+.end-plate p { font-family: var(--sans); font-size: 14px; color: var(--ink-2); max-width: 22ch; }
+
+.reader-controls { display: flex; align-items: center; gap: 16px; }
+.reader-controls button { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; display: grid; place-items: center; transition: .15s var(--ease); }
+.reader-controls button:hover:not(:disabled) { border-color: var(--ink); }
+.reader-controls button:disabled { opacity: .3; cursor: not-allowed; }
+.reader-controls button svg { width: 15px; height: 15px; }
+
+.close-book-btn { font-family: var(--sans); font-size: 12px; font-weight: 600; color: var(--ink-3); background: none; border: none; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.close-book-btn:hover { color: var(--ink); }
+
+.finish-btn-row { display: flex; gap: 10px; margin-top: -4px; }
+
+/* ───────────────────────── info panel (right column) ───────────────────────── */
+
+.book-panel { --accent: var(--ink); padding: clamp(26px, 3.4vw, 40px) clamp(24px, 3vw, 36px); display: flex; flex-direction: column; overflow-y: auto; }
+.book-panel .genre-tag { font-family: var(--mono); font-size: 10.5px; font-weight: 600; color: var(--ink-3); letter-spacing: .04em; text-transform: uppercase; margin-bottom: 10px; }
+.book-panel h2 { font-family: var(--serif); font-size: clamp(22px, 2.4vw, 27px); font-weight: 700; line-height: 1.12; margin: 0 0 6px; letter-spacing: -.02em; }
+.book-panel .by { font-size: 13.5px; color: var(--ink-2); margin-bottom: 16px; }
+.book-panel .fav-btn {
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink-2); border-radius: 50%; width: 34px; height: 34px;
+  display: inline-flex; align-items: center; justify-content: center; cursor: pointer; float: right; transition: .15s var(--ease);
+}
+.book-panel .fav-btn svg { width: 17px; height: 17px; }
+.book-panel .fav-btn.on { color: var(--store); border-color: #FBCFE8; background: #FDF2F8; }
+.book-panel .fav-btn:hover { border-color: var(--ink-3); }
+.book-panel .blurb { font-size: 14.5px; line-height: 1.65; color: var(--ink-2); margin-bottom: 20px; clear: both; }
+
+.meta-row { display: flex; gap: 18px; flex-wrap: wrap; padding: 16px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-bottom: 20px; }
+.meta-item .k { font-family: var(--mono); font-size: 10px; color: var(--ink-3); margin-bottom: 3px; text-transform: uppercase; letter-spacing: .03em; }
+.meta-item .v { font-size: 13px; color: var(--ink); font-weight: 600; }
+
+/* ── borrow / buy widget ── */
+
+.card-widget { border: 1px solid var(--line); border-radius: 14px; background: var(--surface-2); padding: 18px; position: relative; overflow: hidden; }
+.card-widget .cw-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; gap: 10px; }
+.card-widget .cw-title { font-family: var(--serif); font-size: 15px; font-weight: 700; }
+.card-widget .cw-avail { font-family: var(--mono); font-size: 10.5px; display: flex; align-items: center; gap: 6px; color: var(--ink-2); white-space: nowrap; }
+.card-widget .cw-avail .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--success); }
+.card-widget .cw-avail.out .dot { background: var(--danger); }
+.card-widget .cw-avail.out { color: var(--danger); }
+.card-widget .price-display { font-family: var(--serif); font-size: 28px; font-weight: 700; color: var(--ink); letter-spacing: -.02em; }
+
+.name-field { margin-bottom: 12px; }
+.name-field label { display: block; font-family: var(--mono); font-size: 10px; color: var(--ink-3); margin-bottom: 6px; letter-spacing: .03em; text-transform: uppercase; }
+.name-field input { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); font-family: var(--sans); font-size: 14px; color: var(--ink); outline: none; transition: border-color .15s; }
+.name-field input:focus { border-color: var(--ink); }
+.name-field input:disabled { opacity: .6; cursor: not-allowed; }
+.name-field .field-error { font-size: 11.5px; color: var(--danger); margin-top: 6px; display: none; }
+.name-field.error input { border-color: var(--danger); }
+.name-field.error .field-error { display: block; }
+
+.card-widget .cw-note { font-size: 11.5px; color: var(--ink-3); margin-top: 10px; line-height: 1.5; }
+
+.loan-status { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.loan-status .ls-text { font-size: 13px; line-height: 1.5; }
+.loan-status .ls-due { font-family: var(--mono); color: var(--ink); font-weight: 600; }
+
+.stamp-burst { display: none; } /* retired with the brass-stamp motif; the panel re-render already gives instant feedback */
+
+@media (prefers-reduced-motion: reduce) {
+  .book-closed.opening .cover3d { animation: none; opacity: 0; }
+  .leaf { transition: none; }
+}

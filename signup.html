@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>(function(){try{if(localStorage.getItem("readily:theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="img/favicon.png">
+<title>Readily &middot; Sign Up</title>
+<meta name="description" content="Create a Readily member account to borrow, buy, and keep track of what you read.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="rrPageLoader" class="rr-page-loader">
+  <div class="rr-loader-mark"><img src="img/logo-mark.png" alt=""></div>
+  <div class="rr-loader-ring" hidden></div>
+  <div class="rr-loader-text" hidden>Loading…</div>
+</div>
+
+
+<header class="ledger-bar">
+  <div class="ledger-inner">
+    <a href="index.html" class="ledger-mark"><span class="mark-icon"><img class="icon-dark" src="img/logo-mark-dark.png" alt=""><img class="icon-light" src="img/logo-mark.png" alt=""></span> Readily <small>Library &amp; Bookshop</small></a>
+    <div class="ledger-actions">
+      <div class="nav-cta"><a href="browse.html" class="btn-nav-ghost">Back to Browsing</a></div>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="auth-hero">
+  <div class="auth-shell">
+    <h1>Create your account</h1>
+    <p class="sub">Free to join. Borrow library books, buy from the shop, and keep everything in one place.</p>
+
+    <div id="signupError" class="auth-hint" style="border-color:var(--danger);color:var(--danger);background:var(--danger-bg)" hidden></div>
+
+    <form id="signupForm" novalidate>
+      <div class="field">
+        <label for="suName">Full name</label>
+        <input type="text" id="suName" required placeholder="e.g. Alex Rivera">
+        <div class="error-msg">Please tell us your name.</div>
+      </div>
+      <div class="field">
+        <label for="suEmail">Email</label>
+        <input type="email" id="suEmail" required placeholder="you@example.com">
+        <div class="error-msg">Enter a valid email address.</div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="suPassword">Password</label>
+          <input type="password" id="suPassword" required placeholder="At least 6 characters">
+          <div class="error-msg">At least 6 characters.</div>
+        </div>
+        <div class="field">
+          <label for="suConfirm">Confirm password</label>
+          <input type="password" id="suConfirm" required placeholder="Repeat password">
+          <div class="error-msg">Passwords don't match.</div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+    </form>
+
+    <div class="auth-switch">Already a member? <a href="login.html">Log in</a></div>
+  </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <span>Readily &middot; a library and a bookshop, under one roof.</span>
+</footer>
+
+<script src="js/page-loader.js"></script>
+<script src="js/data.js"></script>
+<script src="js/genre-colors.js"></script>
+<script src="js/store.js"></script>
+<script src="js/sound.js"></script>
+<script src="js/common.js"></script>
+<script src="js/signup.js"></script>
+<script type="module" src="js/motion-fx.js"></script>
+</body>
+</html>

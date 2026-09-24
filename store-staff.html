@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>(function(){try{if(localStorage.getItem("readily:theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="img/favicon.png">
+<title>Readily &middot; Store Staff</title>
+<meta name="description" content="Store staff dashboard: orders, shop catalog, customers, and reports.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-role="store">
+<div id="rrPageLoader" class="rr-page-loader">
+  <div class="rr-loader-mark"><img src="img/logo-mark.png" alt=""></div>
+  <div class="rr-loader-ring" hidden></div>
+  <div class="rr-loader-text" hidden>Loading&hellip;</div>
+</div>
+
+<header class="ledger-bar">
+  <div class="ledger-inner">
+    <a href="store-staff.html" class="ledger-mark"><span class="mark-icon"><img class="icon-dark" src="img/logo-mark-dark.png" alt=""><img class="icon-light" src="img/logo-mark.png" alt=""></span> Readily <small>Store Staff</small></a>
+    <nav class="ledger-nav">
+      <span class="role-badge">Store Staff</span>
+    </nav>
+    <div class="ledger-actions">
+      <div class="nav-cta"><a href="browse.html" class="btn-nav-ghost">View Public Site</a></div>
+      <div id="accountMenuSlot"></div>
+      <button class="sound-toggle" id="soundToggle" aria-label="Toggle sound"></button>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <span class="eyebrow">Store Staff</span>
+    <h1>Shop Operations.</h1>
+    <p class="lede">Orders, catalog, customers, and reports for the bookshop side of Readily.</p>
+  </section>
+
+  <div class="admin-grid-stats">
+    <div class="stat-card"><span class="sc-label">Store Titles</span><span class="sc-val" id="statTitles">0</span></div>
+    <div class="stat-card"><span class="sc-label">Orders (all time)</span><span class="sc-val" id="statOrders">0</span></div>
+    <div class="stat-card"><span class="sc-label">Revenue</span><span class="sc-val" id="statRevenue">$0</span></div>
+    <div class="stat-card"><span class="sc-label">Customers</span><span class="sc-val" id="statCustomers">0</span></div>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button type="button" class="tab-btn active" data-tab="orders" role="tab">Orders</button>
+    <button type="button" class="tab-btn" data-tab="catalog" role="tab">Catalog</button>
+    <button type="button" class="tab-btn" data-tab="customers" role="tab">Customers</button>
+    <button type="button" class="tab-btn" data-tab="reports" role="tab">Reports</button>
+  </div>
+
+  <section id="panelOrders">
+    <div class="admin-header-row"><div><h2>Orders</h2><span class="desc">Every purchase made through the shop</span></div></div>
+    <div class="table-wrap">
+      <table class="admin-table">
+        <thead><tr><th>Order</th><th>Customer</th><th>Items</th><th>Total</th><th>Date</th></tr></thead>
+        <tbody id="ordersBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="panelCatalog" hidden>
+    <div class="admin-header-row">
+      <div><h2>Store Catalog</h2><span class="desc">Manage titles and pricing</span></div>
+      <button type="button" class="btn btn-primary btn-sm" id="btnOpenIntake">+ Add New Book</button>
+    </div>
+    <div class="table-wrap">
+      <table class="admin-table">
+        <thead><tr><th>Title</th><th>Genre / Year</th><th>SKU</th><th>Price</th><th style="text-align:right">Actions</th></tr></thead>
+        <tbody id="catalogBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="panelCustomers" hidden>
+    <div class="admin-header-row"><div><h2>Customers</h2><span class="desc">Search purchase history</span></div></div>
+    <div class="search-field" style="max-width:340px;margin-bottom:14px">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <label for="customerSearch" class="visually-hidden">Search customers</label>
+      <input id="customerSearch" type="text" placeholder="Search by name or email...">
+    </div>
+    <div class="table-wrap">
+      <table class="admin-table">
+        <thead><tr><th>Customer</th><th>Orders</th><th>Total Spent</th></tr></thead>
+        <tbody id="customersBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="panelReports" hidden>
+    <div class="admin-header-row"><div><h2>Reports</h2><span class="desc">Best sellers, all time</span></div></div>
+    <div class="table-wrap">
+      <table class="admin-table">
+        <thead><tr><th>#</th><th>Title</th><th>Genre</th><th>Copies Sold</th><th>Revenue</th></tr></thead>
+        <tbody id="reportsBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="reset-demo-row">
+    <div class="rd-text"><strong>Reset for Demo</strong><span>Wipes all accounts, orders, loans, and catalog edits, then restores the original demo data.</span></div>
+    <button type="button" class="btn btn-danger btn-sm" id="btnResetDemo">Reset for Demo</button>
+  </div>
+</main>
+
+<!-- Intake Modal -->
+<div class="modal-backdrop" id="intakeModal" hidden role="dialog" aria-modal="true" aria-labelledby="intakeTitle">
+  <div class="modal-card">
+    <h2 id="intakeTitle">Add a Store Book</h2>
+    <p class="sub">This title will be for sale in the shop, at the price you set.</p>
+    <form id="intakeForm">
+      <div class="intake-grid">
+        <div class="field intake-full"><label for="newTitle">Title *</label><input type="text" id="newTitle" required></div>
+        <div class="field"><label for="newAuthor">Author *</label><input type="text" id="newAuthor" required></div>
+        <div class="field"><label for="newGenre">Genre</label>
+          <select id="newGenre">
+            <option>Fiction</option><option>Mystery</option><option>Science Fiction</option><option>Fantasy</option>
+            <option>Romance</option><option>Poetry</option><option>Non-Fiction</option><option>Horror</option>
+            <option>Classic Literature</option><option>Adventure</option><option>Self-Help</option>
+          </select>
+        </div>
+        <div class="field"><label for="newYear">Year</label><input type="number" id="newYear" value="2024"></div>
+        <div class="field"><label for="newPrice">Price (USD)</label><input type="number" id="newPrice" value="14.99" min="0.99" step="0.01"></div>
+        <div class="field intake-full"><label for="newBlurb">Blurb</label><textarea id="newBlurb" rows="2"></textarea></div>
+        <div class="field intake-full"><label for="newExcerpt">Opening lines (reader preview)</label><textarea id="newExcerpt" rows="3"></textarea></div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-outline" id="btnCancelIntake">Cancel</button>
+        <button type="submit" class="btn btn-primary">Add to Catalog</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Reset Confirm Modal -->
+<div class="modal-backdrop" id="resetModal" hidden role="dialog" aria-modal="true" aria-labelledby="resetTitle">
+  <div class="modal-card" style="max-width:420px">
+    <h2 id="resetTitle">Reset all demo data?</h2>
+    <p class="sub">This erases every account, loan, order, and catalog edit on this browser, then restores the original sample data. You'll be logged out.</p>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-outline" id="btnCancelReset">Cancel</button>
+      <button type="button" class="btn btn-danger" id="btnConfirmReset">Yes, Reset Everything</button>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer"><span>Readily &middot; Store Staff</span></footer>
+<div id="toast-region"></div>
+
+<script src="js/page-loader.js"></script>
+<script src="js/data.js"></script>
+<script src="js/genre-colors.js"></script>
+<script src="js/store.js"></script>
+<script src="js/sound.js"></script>
+<script src="js/toast.js"></script>
+<script src="js/common.js"></script>
+<script src="js/store-staff.js"></script>
+<script type="module" src="js/motion-fx.js"></script>
+</body>
+</html>

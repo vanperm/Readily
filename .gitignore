@@ -1,0 +1,12 @@
+.DS_Store
+
+# Laura Barrett's actual published book-cover illustrations — reference
+# material only, never used as site assets (original AI-generated /
+# hand-built covers are used instead, see img/covers/). Not ours to
+# distribute.
+Laura_Barrett_Wicked_Cover.jpg.webp
+laura-barrett-*.jpg.webp
+
+# Original source photo for img/library-hero.jpeg (kept locally as the
+# uncropped original; the site only ever references the copy in img/).
+Unknown.jpeg

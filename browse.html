@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>(function(){try{if(localStorage.getItem("readily:theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="img/favicon.png">
+<title>Readily &middot; Browse</title>
+<meta name="description" content="Browse the library and the bookshop — search, filter by genre, and preview any title in 3D.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="rrPageLoader" class="rr-page-loader">
+  <div class="rr-loader-mark"><img src="img/logo-mark.png" alt=""></div>
+  <div class="rr-loader-ring" hidden></div>
+  <div class="rr-loader-text" hidden>Loading…</div>
+</div>
+
+
+<header class="ledger-bar">
+  <div class="ledger-inner">
+    <a href="index.html" class="ledger-mark"><span class="mark-icon"><img class="icon-dark" src="img/logo-mark-dark.png" alt=""><img class="icon-light" src="img/logo-mark.png" alt=""></span> Readily <small>Library &amp; Bookshop</small></a>
+    <nav class="ledger-nav">
+      <a href="index.html">Home</a>
+      <a href="browse.html" class="on" title="Search and filter the full catalog">Browse</a>
+      <a href="explorer.html" title="A visual shelf view to browse by genre">Explorer</a>
+      <a href="my-books.html">My Books <span class="count" id="navLoanCount">0</span></a>
+      <a href="cart.html">Cart <span class="count" id="navCartCount">0</span></a>
+    </nav>
+    <div class="ledger-actions">
+      <div id="accountMenuSlot"></div>
+      <button class="sound-toggle" id="soundToggle" aria-label="Toggle sound"></button>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero hero-photo">
+    <div class="hero-bg-slides" id="heroBgSlides">
+      <div class="hero-bg-slide active" style="background-image:url('img/library-hero.jpeg')"></div>
+      <div class="hero-bg-slide" style="background-image:url('img/library-hero-2.jpg')"></div>
+      <div class="hero-bg-slide" style="background-image:url('img/library-hero-3.jpg')"></div>
+      <div class="hero-bg-slide" style="background-image:url('img/library-hero-4.jpg')"></div>
+      <div class="hero-bg-slide" style="background-image:url('img/library-hero-5.jpg')"></div>
+    </div>
+    <span class="eyebrow">Catalog</span>
+    <h1 class="shimmer-text">Browse the shelves.</h1>
+    <p class="lede">Free to borrow, or yours to keep — every title opens as a real, page-turning book before you decide.</p>
+  </section>
+
+  <div class="controls">
+    <div class="controls-row">
+      <div class="search-field">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <label for="searchInput" class="visually-hidden">Search by title, author, or genre</label>
+        <input id="searchInput" type="text" placeholder="Search by title, author, genre, or year..." autocomplete="off">
+        <button type="button" class="search-clear-btn" id="clearSearch" aria-label="Clear search query" hidden>&times;</button>
+      </div>
+      <div class="type-toggle" id="typeToggle">
+        <button type="button" data-type="all" class="on">All</button>
+        <button type="button" data-type="library">Library</button>
+        <button type="button" data-type="store">Store</button>
+      </div>
+      <select class="sort-select" id="sortSelect">
+        <option value="default">Featured</option>
+        <option value="title-asc">Title (A &rarr; Z)</option>
+        <option value="title-desc">Title (Z &rarr; A)</option>
+        <option value="year-desc">Year (Newest)</option>
+        <option value="year-asc">Year (Oldest)</option>
+        <option value="price-asc">Price (Low &rarr; High)</option>
+        <option value="price-desc">Price (High &rarr; Low)</option>
+      </select>
+    </div>
+    <div class="chips" id="genreChips"></div>
+  </div>
+
+  <div class="shelf-meta" id="shelfMeta"></div>
+  <div class="catalog-grid" id="catalogGrid"></div>
+</main>
+
+<footer class="site-footer">
+  <span>Readily &middot; a library and a bookshop, under one roof.</span>
+  <a href="index.html" class="link">Back to home</a>
+</footer>
+
+<div id="toast-region"></div>
+
+<script src="js/page-loader.js"></script>
+<script src="js/data.js"></script>
+<script src="js/genre-colors.js"></script>
+<script src="js/store.js"></script>
+<script src="js/sound.js"></script>
+<script src="js/toast.js"></script>
+<script src="js/confetti.js"></script>
+<script src="js/art.js"></script>
+<script src="js/common.js"></script>
+<script src="js/browse.js"></script>
+<script type="module" src="js/motion-fx.js"></script>
+</body>
+</html>

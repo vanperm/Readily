@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>(function(){try{if(localStorage.getItem("readily:theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="img/favicon.png">
+<title id="pageTitle">Readily &middot; Book</title>
+<meta name="description" content="Preview a book in 3D, then borrow it for free or buy it to keep.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/reader.css">
+</head>
+<body>
+<div id="rrPageLoader" class="rr-page-loader">
+  <div class="rr-loader-mark"><img src="img/logo-mark.png" alt=""></div>
+  <div class="rr-loader-ring" hidden></div>
+  <div class="rr-loader-text" hidden>Loading…</div>
+</div>
+
+
+<header class="ledger-bar">
+  <div class="ledger-inner">
+    <a href="index.html" class="ledger-mark"><span class="mark-icon"><img class="icon-dark" src="img/logo-mark-dark.png" alt=""><img class="icon-light" src="img/logo-mark.png" alt=""></span> Readily <small>Library &amp; Bookshop</small></a>
+    <nav class="ledger-nav">
+      <a href="index.html">Home</a>
+      <a href="browse.html" class="on" title="Search and filter the full catalog">Browse</a>
+      <a href="explorer.html" title="A visual shelf view to browse by genre">Explorer</a>
+      <a href="my-books.html">My Books <span class="count" id="navLoanCount">0</span></a>
+      <a href="cart.html">Cart <span class="count" id="navCartCount">0</span></a>
+    </nav>
+    <div class="ledger-actions">
+      <div id="accountMenuSlot"></div>
+      <button class="sound-toggle" id="soundToggle" aria-label="Toggle sound"></button>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <a href="browse.html" class="back-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg> Back to browsing</a>
+
+  <div class="book-detail-panel" id="bookDetailPanel" hidden>
+    <div class="book-stage">
+      <div class="book-closed" id="bmClosed">
+        <div class="cover3d" id="bmCover" tabindex="0" role="button" aria-label="Open the book">
+          <div class="front-face">
+            <div class="cover-art-slot" id="bmCoverArt"></div>
+            <div class="emblem" id="bmEmblem"></div>
+            <div style="position:relative;z-index:2">
+              <div class="cover-title" id="bmCoverTitle"></div>
+              <div class="cover-author" id="bmCoverAuthor"></div>
+            </div>
+          </div>
+          <div class="spine-edge"></div>
+          <div class="pages-edge"></div>
+        </div>
+      </div>
+      <div class="open-hint" id="bmHint">Click the book to open it</div>
+
+      <div class="book-reader" id="bmReader">
+        <div class="spread">
+          <div class="page-col left" id="bmLeft"></div>
+          <div class="page-col right" id="bmRight"></div>
+        </div>
+        <div class="reader-controls">
+          <button id="bmPrev" aria-label="Previous page">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <span class="reading-progress" id="bmIndicator"></span>
+          <button id="bmNext" aria-label="Next page">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+        <button class="close-book-btn" id="bmCloseBook">Close the book</button>
+      </div>
+    </div>
+
+    <div class="book-panel" id="bmPanel"></div>
+  </div>
+
+  <div class="empty-state" id="notFoundState" hidden>
+    <strong>We couldn't find that book</strong>
+    <p>It may have been removed from the catalog. Try browsing instead.</p>
+    <a href="browse.html" class="btn btn-primary btn-sm" style="margin-top:14px;display:inline-block">Back to Browsing</a>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <span>Readily &middot; a library and a bookshop, under one roof.</span>
+</footer>
+
+<div id="toast-region"></div>
+
+<script src="js/page-loader.js"></script>
+<script src="js/data.js"></script>
+<script src="js/genre-colors.js"></script>
+<script src="js/store.js"></script>
+<script src="js/sound.js"></script>
+<script src="js/toast.js"></script>
+<script src="js/confetti.js"></script>
+<script src="js/art.js"></script>
+<script src="js/common.js"></script>
+<script src="js/reader.js"></script>
+<script type="module" src="js/motion-fx.js"></script>
+</body>
+</html>
