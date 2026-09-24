@@ -221,6 +221,9 @@ function initThemeToggle() {
     paint();
     Sound.click();
   }
+
+  const nudge = document.getElementById("themeNudge");
+  if (nudge) nudge.addEventListener("click", () => toggle.click());
 }
 
 /** Animates a number counting up inside el's textContent. */
